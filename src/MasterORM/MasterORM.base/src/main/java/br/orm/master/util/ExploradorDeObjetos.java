@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.sql.gerador.util;
+package br.orm.master.util;
 
-import br.sql.gerador.exception.NaoContemPrimaryKeyException;
+import br.orm.master.exception.NaoContemPrimaryKeyException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -66,5 +66,9 @@ public class ExploradorDeObjetos<T extends Object> {
 
     public String getTabela() {
         return this.base.getSimpleName();
+    }
+
+    public Field[] getFields() {
+        return this.base.getDeclaredFields();
     }
 }

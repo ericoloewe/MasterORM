@@ -3,12 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.sql.gerador.repositorio;
+package br.orm.master.dominio;
 
 /**
  *
  * @author Érico de Souza Loewe
  */
-public class Contexto {
-    
+public interface GeradorDeComandos {
+    void criarTabela();
+    void adicionar();
+    void remover();    
+    void atualizar();
 }
