@@ -3,56 +3,47 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.orm.master.repositorio;
+package br.orm.master.gerador;
 
 import br.orm.master.annotation.Required;
-import br.orm.master.dominio.GeradorDeComandos;
 import br.orm.master.util.ExploradorDeObjetos;
 import java.lang.reflect.Field;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Érico de Souza Loewe
  */
 public class GeradorDeComandosPostgres implements GeradorDeComandos {
-
-    private final ExploradorDeObjetos explorador;
-
-    public GeradorDeComandosPostgres() {
-        explorador = null;
-    }
-
-    public GeradorDeComandosPostgres(ExploradorDeObjetos<?> explorador) {
-        this.explorador = explorador;
-    }
-
-    public void adicionar() {
+    private Logger LOGGER = Logger.getLogger(GeradorDeComandosPostgres.class.getName());
+    
+    public void adicionar(Object obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void remover() {
+    public void remover(Object obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void atualizar() {
+    public void atualizar(Object obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void criarTabela() {
+    public void criarTabela(Object obj) {
         StringBuilder cmd = new StringBuilder();
-
+        ExploradorDeObjetos exp = new ExploradorDeObjetos(obj.getClass());
         try {
-            Field primaryKey = explorador.getPrimaryKey();
-            cmd.append(String.format("CREATE TABLE %s \n(", explorador.getTabela()));
+            Field primaryKey = exp.getPrimaryKey();
+            cmd.append(String.format("CREATE TABLE %s \n(", exp.getTabela()));
 
-            for (Field atr : this.explorador.getFields()) {
+            for (Field atr : exp.getFields()) {
                 cmd.append(this.criarCampoDaTabela(atr.getName(), atr.getType().getSimpleName(), atr.isAnnotationPresent(Required.class)));
             }
 
-            cmd.append(String.format("\nCONSTRAINT %s_PK PRIMARY KEY (%s)", explorador.getTabela(), primaryKey.getName()));
+            cmd.append(String.format("\nCONSTRAINT %s_PK PRIMARY KEY (%s)", exp.getTabela(), primaryKey.getName()));
             cmd.append("\n)");
         } catch (Exception ex) {
-
+            LOGGER.severe(ex.getMessage());
         }
 
         System.out.println(cmd.toString());

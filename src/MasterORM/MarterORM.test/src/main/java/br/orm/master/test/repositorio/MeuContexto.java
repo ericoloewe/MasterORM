@@ -3,15 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.orm.master.gerador;
+package br.orm.master.test.repositorio;
+
+import br.orm.master.repositorio.Contexto;
 
 /**
  *
  * @author Érico de Souza Loewe
  */
-public interface GeradorDeComandos {
-    void criarTabela(Object obj);
-    void adicionar(Object obj);
-    void remover(Object obj);    
-    void atualizar(Object obj);
+public class MeuContexto extends Contexto {
+    
+    public MeuContexto() {
+        super("postgre");
+    }
 }

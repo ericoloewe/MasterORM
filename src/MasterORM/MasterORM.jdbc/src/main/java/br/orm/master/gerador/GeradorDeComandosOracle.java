@@ -3,40 +3,28 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.orm.master.repositorio;
+package br.orm.master.gerador;
 
-import br.orm.master.dominio.GeradorDeComandos;
-import br.orm.master.util.ExploradorDeObjetos;
 
 /**
  *
  * @author Érico de Souza Loewe
  */
 public class GeradorDeComandosOracle implements GeradorDeComandos {
-    
-    private final ExploradorDeObjetos explorador;
-    
-    public GeradorDeComandosOracle() {
-        explorador = null;
-    }   
-    
-    public GeradorDeComandosOracle(ExploradorDeObjetos<?> explorador) {
-        this.explorador = explorador;
+
+    public void criarTabela(Object obj) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    public void adicionar() {
+    public void adicionar(Object obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void remover() {
+    public void remover(Object obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void atualizar() {
+    public void atualizar(Object obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-    public void criarTabela() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
 }

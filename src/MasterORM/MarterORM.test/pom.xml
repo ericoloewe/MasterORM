@@ -6,11 +6,11 @@
         <artifactId>MasterORM</artifactId>
         <version>1.0.0</version>
     </parent>
-    <artifactId>MasterORM.base</artifactId>
+    <artifactId>MarterORM.test</artifactId>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
-            <artifactId>MasterORM.jdbc</artifactId>
+            <artifactId>MasterORM.base</artifactId>
             <groupId>br.orm.master</groupId>
             <version>1.0.0</version>
         </dependency>

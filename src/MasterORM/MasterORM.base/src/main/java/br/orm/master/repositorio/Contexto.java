@@ -5,10 +5,10 @@
  */
 package br.orm.master.repositorio;
 
-import br.orm.master.dominio.GeradorDeComandos;
-import br.orm.master.util.ExploradorDeObjetos;
+import br.orm.master.gerador.GeradorDeComandos;
+import br.orm.master.gerador.GeradorDeComandosOracle;
+import br.orm.master.gerador.GeradorDeComandosPostgres;
 import java.io.Closeable;
-import java.lang.reflect.Field;
 import java.util.logging.Logger;
 
 /**
@@ -16,10 +16,27 @@ import java.util.logging.Logger;
  * @author Érico de Souza Loewe
  */
 public class Contexto implements Closeable {
-    private Logger LOGGER = Logger.getLogger(ExploradorDeObjetos.class.getName());
+    private Logger LOGGER = Logger.getLogger(Contexto.class.getName());
     
-    public Contexto(GeradorDeComandos comandos) {
-        atribuirAsTabelas(comandos);
+    public Contexto(String gerador) {
+        ExecutadorDeComandos.definirGerador(getGeradorDeComandos(gerador));
+    }
+    
+    private GeradorDeComandos getGeradorDeComandos(String nomeGerador) {
+        GeradorDeComandos gerador = null;
+        
+        switch(nomeGerador) {
+            case "oracle": {
+                gerador = new GeradorDeComandosOracle();
+                break;
+            }
+            case "postgre": {
+                gerador = new GeradorDeComandosPostgres();
+                break;
+            }
+        }
+        
+        return gerador;
     }
 
     public void close() {
@@ -28,20 +45,5 @@ public class Contexto implements Closeable {
 
     private void salvarAlteracoes() {
         
-    }
-
-    private void atribuirAsTabelas(GeradorDeComandos comandos) {
-        for(Field field : this.getClass().getDeclaredFields()) {
-            if(field.getClass().getName().equals("Tabela")) {
-                try {
-                    Field geradorDeComandos = field.getClass().getDeclaredField("_comandos");
-                    geradorDeComandos.setAccessible(true);
-                    //field.getGenericType();                    
-                    geradorDeComandos.set(field, comandos);
-                } catch (NoSuchFieldException | SecurityException | IllegalAccessException ex) {
-                    LOGGER.severe(ex.getMessage());
-                }
-            }
-        }
     }
 }

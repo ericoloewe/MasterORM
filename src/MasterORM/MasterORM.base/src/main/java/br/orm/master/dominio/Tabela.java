@@ -5,6 +5,7 @@
  */
 package br.orm.master.dominio;
 
+import br.orm.master.repositorio.ExecutadorDeComandos;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,10 +18,10 @@ public class Tabela<T extends Object> {
     private final List<T> _objetosAAdicionar;
     private final List<T> _objetosARemover;
     private final List<T> _objetosAAtualizar;
-    private final GeradorDeComandos _comandos;
+    private final ExecutadorDeComandos _comandos;
     
-    public Tabela(GeradorDeComandos comandos) {
-        this._comandos = comandos;
+    public Tabela() {
+        this._comandos = new ExecutadorDeComandos<T>();
         this._objetosAAdicionar = new ArrayList<>();
         this._objetosARemover = new ArrayList<>();
         this._objetosAAtualizar = new ArrayList<>();
@@ -44,13 +45,15 @@ public class Tabela<T extends Object> {
     
     public void salvarAlteracoes() {
         for(T obj : _objetosAAdicionar) {
-            _comandos.adicionar();
+            _comandos.adicionar(obj);
         }
+        
         for(T obj : _objetosARemover) {
-            _comandos.remover();
+            _comandos.remover(obj);
         }
+        
         for(T obj : _objetosAAtualizar) {
-            _comandos.atualizar();
+            _comandos.atualizar(obj);
         }
     }
 }
