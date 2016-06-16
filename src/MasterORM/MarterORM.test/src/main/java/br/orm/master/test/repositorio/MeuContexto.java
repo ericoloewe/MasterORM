@@ -5,7 +5,10 @@
  */
 package br.orm.master.test.repositorio;
 
+import br.orm.master.repositorio.Tabela;
+import br.orm.master.model.TipoGeradorBanco;
 import br.orm.master.repositorio.Contexto;
+import br.orm.master.test.model.Pessoa;
 
 /**
  *
@@ -14,6 +17,8 @@ import br.orm.master.repositorio.Contexto;
 public class MeuContexto extends Contexto {
     
     public MeuContexto() {
-        super("postgre");
+        super(TipoGeradorBanco.POSTGRES);
     }
+    
+    public Tabela<Pessoa> Pessoas = new Tabela<Pessoa>();
 }
