@@ -7,68 +7,35 @@ package br.orm.master.util;
 
 import br.orm.master.exception.NaoContemPrimaryKeyException;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.logging.Logger;
 
 /**
  *
  * @author Érico de Souza Loewe
  */
-public class ExploradorDeObjetos<T extends Object> {
-
-    private Class<T> base;
-    private Logger LOGGER = Logger.getLogger(ExploradorDeObjetos.class.getName());
-
-    public ExploradorDeObjetos(Class<T> base) {
-        this.base = base;
+public class ExploradorDeObjetos {
+    public static String getNomeTipoGenerico(Field atr) {
+        String entidadeCompleta = atr.getGenericType().getTypeName();
+        return entidadeCompleta.split("\\.")[entidadeCompleta.split("\\.").length - 1].replaceAll(">", "");
     }
-
-    public Object getValor(Field atr, Object obj) {
-        try {
-            String nomeGetter = "get"
-                    + Character.toUpperCase(atr.getName().charAt(0))
-                    + atr.getName().substring(1);
-
-            Method mtd = base.getMethod(nomeGetter, (Class[]) null);
-            return mtd.invoke(obj, (Object[]) null);
-        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            LOGGER.severe(ex.getMessage());
-        }
-        return null;
+    
+    public static boolean ehPrimaryKey(Field atr) {
+        return atr.getName().toLowerCase().equals("id") || atr.getName().substring(atr.getName().length() - 2, atr.getName().length()).toLowerCase().equals("id") || atr.getName().substring(0, 2).toLowerCase().equals("id");
     }
-
-    public void setValor(Field atr, Object obj, Object value) {
-        try {
-            String nomeSetter = "set"
-                    + Character.toUpperCase(atr.getName().charAt(0))
-                    + atr.getName().substring(1);
-
-            Method mtd = base.getMethod(nomeSetter, new Class[]{value.getClass()});
-            mtd.invoke(obj, value);
-        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            LOGGER.severe(ex.getMessage());
-        }
-    }
-
-    public Field getPrimaryKey() throws NaoContemPrimaryKeyException {
-        for (Field atr : this.base.getDeclaredFields()) {
-            if (ehPrimaryKey(atr)) {
-                return atr;
+    
+    public Field getPrimaryKey(Field atr) throws NaoContemPrimaryKeyException {
+        for (Field field : atr.getClass().getDeclaredFields()) {
+            if (ehPrimaryKey(field)) {
+                return field;
             }
         }
         throw new NaoContemPrimaryKeyException();
     }
 
-    public boolean ehPrimaryKey(Field atr) {
-        return atr.getName().toLowerCase().equals("id") || atr.getName().substring(atr.getName().length() - 2, atr.getName().length()).toLowerCase().equals("id") || atr.getName().substring(0, 2).toLowerCase().equals("id");
+    public String getTabela(Field atr) {
+        return atr.getClass().getSimpleName();
     }
 
-    public String getTabela() {
-        return this.base.getSimpleName();
-    }
-
-    public Field[] getFields() {
-        return this.base.getDeclaredFields();
+    public Field[] getFields(Field atr) {
+        return atr.getClass().getDeclaredFields();
     }
 }

@@ -8,7 +8,10 @@ package br.orm.master.repositorio;
 import br.orm.master.gerador.GeradorDeComandos;
 import br.orm.master.gerador.GeradorDeComandosOracle;
 import br.orm.master.gerador.GeradorDeComandosPostgres;
+import br.orm.master.model.TipoGeradorBanco;
+import br.orm.master.util.ExploradorDeObjetos;
 import java.io.Closeable;
+import java.lang.reflect.Field;
 import java.util.logging.Logger;
 
 /**
@@ -16,26 +19,28 @@ import java.util.logging.Logger;
  * @author Érico de Souza Loewe
  */
 public class Contexto implements Closeable {
+
     private Logger LOGGER = Logger.getLogger(Contexto.class.getName());
-    
-    public Contexto(String gerador) {
-        ExecutadorDeComandos.definirGerador(getGeradorDeComandos(gerador));
+
+    public Contexto(TipoGeradorBanco gerador) {
+        ExecutadorDeComandosSingleton.setGerador(getGeradorDeComandos(gerador));
+        contruirTabelas();
     }
-    
-    private GeradorDeComandos getGeradorDeComandos(String nomeGerador) {
+
+    private GeradorDeComandos getGeradorDeComandos(TipoGeradorBanco nomeGerador) {
         GeradorDeComandos gerador = null;
-        
-        switch(nomeGerador) {
-            case "oracle": {
+
+        switch (nomeGerador.name()) {
+            case "ORACLE": {
                 gerador = new GeradorDeComandosOracle();
                 break;
             }
-            case "postgre": {
+            case "POSTGRES": {
                 gerador = new GeradorDeComandosPostgres();
                 break;
             }
         }
-        
+
         return gerador;
     }
 
@@ -44,6 +49,18 @@ public class Contexto implements Closeable {
     }
 
     private void salvarAlteracoes() {
-        
+
+    }
+
+    private void contruirTabelas() {
+        for (Field field : this.getClass().getDeclaredFields()) {
+            if (field.getType().getTypeName().equals(Tabela.class.getTypeName())) {
+                try {
+                    System.out.println(ExploradorDeObjetos.getNomeTipoGenerico(field));
+                } catch (SecurityException ex) {
+                    LOGGER.severe(ex.getMessage());
+                }
+            }
+        }
     }
 }

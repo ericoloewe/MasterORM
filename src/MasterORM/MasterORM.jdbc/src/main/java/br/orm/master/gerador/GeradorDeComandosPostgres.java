@@ -6,7 +6,7 @@
 package br.orm.master.gerador;
 
 import br.orm.master.annotation.Required;
-import br.orm.master.util.ExploradorDeObjetos;
+import br.orm.master.util.ExploradorDeObjeto;
 import java.lang.reflect.Field;
 import java.util.logging.Logger;
 
@@ -31,7 +31,7 @@ public class GeradorDeComandosPostgres implements GeradorDeComandos {
 
     public void criarTabela(Object obj) {
         StringBuilder cmd = new StringBuilder();
-        ExploradorDeObjetos exp = new ExploradorDeObjetos(obj.getClass());
+        ExploradorDeObjeto exp = new ExploradorDeObjeto(obj.getClass());
         try {
             Field primaryKey = exp.getPrimaryKey();
             cmd.append(String.format("CREATE TABLE %s \n(", exp.getTabela()));

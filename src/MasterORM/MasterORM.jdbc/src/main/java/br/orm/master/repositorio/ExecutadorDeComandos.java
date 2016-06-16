@@ -13,21 +13,19 @@ import br.orm.master.gerador.GeradorDeComandos;
  */
 public class ExecutadorDeComandos<T extends Object> {
     
-    private static GeradorDeComandos _gerador;
-    
     public void adicionar(T obj) {
-        _gerador.adicionar(obj);
+        _gerador().adicionar(obj);
     }
     
     public void atualizar(T obj) {
-        _gerador.adicionar(obj);
+        _gerador().adicionar(obj);
     }
     
     public void remover(T obj) {
-        _gerador.adicionar(obj);
+        _gerador().adicionar(obj);
     }
     
-    public static void definirGerador(GeradorDeComandos gerador) {
-        _gerador = gerador;
+    private GeradorDeComandos _gerador() {
+        return ExecutadorDeComandosSingleton.getGerador();
     }
 }
